@@ -1,22 +1,28 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, Newsreader } from "next/font/google";
+import { IBM_Plex_Mono, Manrope, Sora } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { profile } from "@/content/profile";
 import { CitationLinkage } from "@/components/citation-linkage";
 import "./globals.css";
 
-const newsreader = Newsreader({
+const sora = Sora({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-newsreader",
-  style: ["normal", "italic"],
-  weight: ["400", "500", "600"],
+  variable: "--font-sora",
+  weight: ["500", "600", "700"],
 });
 
-const plexMono = IBM_Plex_Mono({
+const manrope = Manrope({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-plex-mono",
+  variable: "--font-manrope",
+  weight: ["400", "500", "600", "700"],
+});
+
+const jetbrains = IBM_Plex_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-jetbrains",
   weight: ["400", "500"],
 });
 
@@ -44,7 +50,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { readonly children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${newsreader.variable} ${plexMono.variable}`}>
+    <html
+      lang="en"
+      className={`${sora.variable} ${manrope.variable} ${jetbrains.variable}`}
+      /* The design commits to one dark world; tell the UA so form controls and
+         scrollbars match rather than rendering light chrome on a dark page. */
+      style={{ colorScheme: "dark" }}
+    >
       <body>
         {children}
         <CitationLinkage />

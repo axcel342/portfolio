@@ -1,106 +1,224 @@
 import Link from "next/link";
-import { Masthead } from "@/components/masthead";
-import { CopyEmail } from "@/components/copy-email";
-import { certifications, education } from "@/content/background";
+import { Hero } from "@/components/hero";
+import { MetricMarquee } from "@/components/marquee";
+import { SiteNav } from "@/components/site-nav";
+import { alsoBuilt, certifications, contact, education } from "@/content/home";
 import { experience } from "@/content/experience";
-import {
-  alsoBuilt,
-  contactLine,
-  headline,
-  HomeRail,
-  lede,
-  workSummaries,
-} from "@/content/home";
 import { profile } from "@/content/profile";
+import { stackGroups } from "@/content/stack";
 import { workIndex } from "@/content/work";
 
 export default function HomePage() {
   return (
-    <main className="shell page">
-      <div className="enter enter-1">
-        <Masthead home />
-      </div>
+    <>
+      <SiteNav />
+      <main>
+        <Hero />
+        <MetricMarquee />
 
-      <section className="hero">
-        <h1 className="hero-headline enter enter-2">{headline}</h1>
-        <p className="hero-lede enter enter-3">{lede}</p>
-      </section>
+        {/* ---------------- work ---------------- */}
+        <section id="work" className="shell section">
+          <p className="section-label">Selected work</p>
+          <h2 className="section-title">Systems in production, not prototypes</h2>
+          <p className="section-note">
+            Four projects written up the way an engineer reads them — the problem, the architectural
+            decision I&rsquo;d defend, and what happened once real people used it.
+          </p>
 
-      <div className="section-head">
-        <h2>Selected work</h2>
-        <span>{workIndex.length} case studies</span>
-      </div>
-      <div className="work-list">
-        {workIndex.map((entry) => (
-          <Link key={entry.slug} className="work-entry" href={`/work/${entry.slug}`}>
-            <h3>{entry.title}</h3>
-            <span className="work-entry-year">{entry.year}</span>
-            <p>{workSummaries[entry.slug]}</p>
-            <span className="work-entry-more">Read the case study &rarr;</span>
-          </Link>
-        ))}
-      </div>
-      <HomeRail />
+          <div className="card-grid">
+            {workIndex.map((entry) => (
+              <Link key={entry.slug} className="card" href={`/work/${entry.slug}`}>
+                <div className="card-eyebrow">
+                  <span>{entry.domain}</span>
+                  <span>{entry.year}</span>
+                </div>
+                <h3>{entry.title}</h3>
+                <p>{entry.summary}</p>
 
-      <div className="section-head">
-        <h2>Also built</h2>
-        <span>Not written up</span>
-      </div>
-      <div className="compact">
-        {alsoBuilt.map((item) => (
-          <article key={item.title} className="compact-row">
-            <h3>{item.title}</h3>
-            <span className="when">{item.when}</span>
-            <p>{item.detail}</p>
-            {item.stack ? <span className="stack-line">{item.stack}</span> : null}
-          </article>
-        ))}
-      </div>
+                {entry.stats ? (
+                  <div className="stat-row">
+                    {entry.stats.map((stat) => (
+                      <span key={stat.label} className="stat">
+                        <b>{stat.value}</b>
+                        <span>{stat.label}</span>
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
 
-      <div className="section-head">
-        <h2>Experience</h2>
-        <span>Since 2024</span>
-      </div>
-      <div className="compact">
-        {experience.map((role) => (
-          <article key={role.company} className="compact-row">
-            <h3>{role.company}</h3>
-            <span className="when">{role.when}</span>
-            <span className="role">{role.role}</span>
-            <p>{role.detail}</p>
-            <span className="stack-line">{role.stack}</span>
-          </article>
-        ))}
-      </div>
+                <div className="pills">
+                  {entry.stack.map((item) => (
+                    <span key={item} className="pill">
+                      {item}
+                    </span>
+                  ))}
+                </div>
 
-      <div className="section-head">
-        <h2>Background</h2>
-        <span>Education &amp; certifications</span>
-      </div>
-      <div className="compact">
-        {[...education, ...certifications].map((item) => (
-          <article key={item.title} className="compact-row">
-            <h3>{item.title}</h3>
-            <span className="when">{item.when}</span>
-            <p>{item.detail}</p>
-          </article>
-        ))}
-      </div>
+                <span className="card-more">Read the case study →</span>
+              </Link>
+            ))}
+          </div>
+        </section>
 
-      <footer className="contact">
-        <p className="contact-line">{contactLine}</p>
-        <div className="contact-links">
-          <a href={`mailto:${profile.email}`}>{profile.email}</a>
-          <CopyEmail email={profile.email} />
-          <a href={profile.links.linkedin} rel="noreferrer noopener" target="_blank">
-            LinkedIn
-          </a>
-          <a href={profile.links.github} rel="noreferrer noopener" target="_blank">
-            GitHub
-          </a>
-          <a href={profile.links.resume}>Résumé (PDF)</a>
+        {/* ---------------- experience ---------------- */}
+        <section id="experience" className="shell section">
+          <p className="section-label">Experience</p>
+          <h2 className="section-title">Where I&rsquo;ve shipped</h2>
+          <p className="section-note">
+            Three companies since 2024, all of it AI engineering on live products.
+          </p>
+
+          <div className="timeline">
+            {experience.map((role) => (
+              <article key={role.company} className="timeline-item">
+                <div className="timeline-head">
+                  <span className="when">{role.when}</span>
+                  <span>{role.where}</span>
+                </div>
+                <h3>
+                  {role.role} <span className="at">· {role.company}</span>
+                </h3>
+                <p className="timeline-summary">{role.summary}</p>
+
+                <div className="pills" style={{ marginTop: "1rem" }}>
+                  {role.stack.map((item) => (
+                    <span key={item} className="pill pill-accent">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+
+                {/* No marker element here: li::before is the bullet, and an extra
+                    child would take the text's grid column. */}
+                <ul className="bullets">
+                  {role.bullets.map((bullet) => (
+                    <li key={bullet}>
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* ---------------- stack ---------------- */}
+        <section id="stack" className="shell section">
+          <p className="section-label">The stack</p>
+          <h2 className="section-title">What I actually work in</h2>
+          <p className="section-note">
+            Everything listed here appears in shipped work, not on a reading list.
+          </p>
+
+          <div className="stack-grid">
+            {stackGroups.map((group) => (
+              <div key={group.title} className="stack-group">
+                <h3>{group.title}</h3>
+                <div className="pills">
+                  {group.items.map((item) => (
+                    <span key={item} className="pill">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ---------------- also built ---------------- */}
+        <section className="shell section">
+          <p className="section-label">Also built</p>
+          <h2 className="section-title">Not written up, still real</h2>
+
+          <div className="card-grid">
+            {alsoBuilt.map((item) => (
+              <article key={item.title} className="card">
+                <div className="card-eyebrow">
+                  <span>Project</span>
+                  <span>{item.when}</span>
+                </div>
+                <h3>{item.title}</h3>
+                <p>{item.detail}</p>
+                {item.stack ? (
+                  <div className="pills">
+                    {item.stack.map((tech) => (
+                      <span key={tech} className="pill">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* ---------------- background ---------------- */}
+        <section id="background" className="shell section">
+          <p className="section-label">Background</p>
+          <h2 className="section-title">Education &amp; certifications</h2>
+
+          <div className="edu-grid">
+            {education.map((item) => (
+              <div key={item.title} className="edu-item">
+                <span className="where">{item.when}</span>
+                <h3>{item.title}</h3>
+                <p>{item.detail}</p>
+              </div>
+            ))}
+            {certifications.map((item) => (
+              <div key={item.title} className="edu-item">
+                <span className="where">{item.when}</span>
+                <h3>{item.title}</h3>
+                <p>{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ---------------- contact ---------------- */}
+        <section id="contact" className="shell section">
+          <p className="section-label">Contact</p>
+          <div className="contact-panel">
+            <h2>{contact.title}</h2>
+            <p>{contact.body}</p>
+            <div className="contact-actions">
+              <a className="btn btn-primary btn-lg" href={`mailto:${profile.email}`}>
+                {profile.email}
+              </a>
+              <a
+                className="btn btn-ghost btn-lg"
+                href={profile.links.linkedin}
+                rel="noreferrer noopener"
+                target="_blank"
+              >
+                LinkedIn
+              </a>
+              <a
+                className="btn btn-ghost btn-lg"
+                href={profile.links.github}
+                rel="noreferrer noopener"
+                target="_blank"
+              >
+                GitHub
+              </a>
+              <a className="btn btn-ghost btn-lg" href={profile.links.resume}>
+                Résumé (PDF)
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <div className="shell">
+          <footer className="site-footer">
+            <span>
+              {profile.name} · {profile.location}
+            </span>
+            <span>{profile.availability}</span>
+          </footer>
         </div>
-      </footer>
-    </main>
+      </main>
+    </>
   );
 }

@@ -1,11 +1,32 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { resolveSiteUrl } from "@/lib/site-url";
+import type { NavSection } from "@/types";
+
+/**
+ * Drop a file at public/portrait.jpg and the hero shows it. Remove the file and
+ * the hero lays out cleanly without a gap where a photo should be — so the
+ * portrait is optional rather than load-bearing.
+ */
+function findPortrait(): string | null {
+  try {
+    return existsSync(join(process.cwd(), "public", "portrait.jpg")) ? "/portrait.jpg" : null;
+  } catch {
+    return null;
+  }
+}
 
 export const profile = {
   name: "Momin Imran Qureshi",
+  firstName: "Momin",
   role: "AI Engineer",
   location: "Lahore, Pakistan",
-  availability: "Open to work",
+  availability: "Open to new roles & client work",
   email: "mominimran000@gmail.com",
+  phone: "+92 321-8336629",
+  portrait: findPortrait(),
+  /** A real credential from the CV, not a manufactured accolade. */
+  badge: "Azure AI Engineer · AI-102",
   links: {
     github: "https://github.com/axcel342",
     linkedin: "https://www.linkedin.com/in/momin-imran-qureshi",
@@ -20,3 +41,11 @@ export const profile = {
   tagline:
     "AI engineer building production LLM and agent systems — retrieval, orchestration, tool use, and the evaluation that proves they work.",
 } as const;
+
+export const navSections: readonly NavSection[] = [
+  { id: "work", label: "Work" },
+  { id: "experience", label: "Experience" },
+  { id: "stack", label: "Stack" },
+  { id: "background", label: "Background" },
+  // No "Contact" entry — the nav's primary button already goes there.
+];

@@ -1,7 +1,28 @@
 # Portfolio Design Spec — Momin Imran Qureshi
 
+> **Superseded on 2026-08-12, same day, by owner decision.** This document
+> records the "Grounded" journal direction — warm archival paper, Newsreader
+> serif, citation blue — which was built, deployed and then replaced. The owner
+> supplied a reference portfolio and chose to match it closely: dark ground,
+> Sora display type, a violet-to-cyan gradient accent, cards and tech pills.
+>
+> The concern raised at the time, and overruled deliberately, was that dark plus
+> a violet/cyan gradient is the most common generated-portfolio look in
+> circulation, and that adopting it meant giving up the citation device as the
+> site's signature.
+>
+> What survived the change, and why: **the citation apparatus still runs on the
+> case studies**, because it does argumentative rather than decorative work;
+> **the content honesty rules below are unchanged and still binding**; and the
+> diagrams still take their colour from tokens, which is why retuning the
+> palette retuned every drawing without touching an SVG.
+>
+> The sections below describe the superseded visual direction. Treat the
+> architecture, content rules, citation model and test scope as current; treat
+> the palette and typography as history.
+
 **Date:** 2026-08-12
-**Status:** Approved design, ready for implementation planning
+**Status:** Superseded — see the note above
 **Repository:** `/home/ubuntu/momin-portfolio` (standalone — deliberately not inside the Ember/Onyx fork)
 
 ## Issues to Address

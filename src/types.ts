@@ -35,19 +35,36 @@ export type WorkIndexEntry = {
   readonly slug: CaseStudySlug;
   readonly title: string;
   readonly year: string;
+  /** Short domain label shown as the card eyebrow. */
+  readonly domain: string;
+  /** Two-sentence card summary. */
+  readonly summary: string;
+  /**
+   * Headline figures, all CV-sourced. Omitted where a project has no honest
+   * numbers — a stat row of words reads as padding.
+   */
+  readonly stats?: readonly { readonly value: string; readonly label: string }[];
+  readonly stack: readonly string[];
 };
 
 export type CompactItem = {
   readonly title: string;
   readonly when: string;
   readonly detail: string;
-  readonly stack?: string;
+  readonly stack?: readonly string[];
 };
 
 export type Role = {
   readonly company: string;
   readonly role: string;
   readonly when: string;
-  readonly detail: string;
-  readonly stack: string;
+  readonly where: string;
+  readonly summary: string;
+  readonly bullets: readonly string[];
+  readonly stack: readonly string[];
+};
+
+export type NavSection = {
+  readonly id: string;
+  readonly label: string;
 };

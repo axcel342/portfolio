@@ -2,11 +2,10 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
 const CASE_STUDIES = ["ember", "kimport", "anti-fragility", "halil"] as const;
-const PAGES = ["/", ...CASE_STUDIES.map((slug) => `/work/${slug}`)];
 
 /**
- * The invariant the whole design rests on: a marker always resolves to a
- * source, and a declared source is always actually cited.
+ * The invariant the case studies rest on: a marker always resolves to a source,
+ * and a declared source is always actually cited.
  */
 async function expectCitationIntegrity(page: Page) {
   const markerIds = await page.$$eval("[data-cite-marker]", (nodes) =>
@@ -25,7 +24,6 @@ async function expectCitationIntegrity(page: Page) {
   const uncitedSources = sourceIds.filter((id) => !markerIds.includes(id));
   expect(uncitedSources, "every declared source is actually cited").toEqual([]);
 
-  // Markers must be real links into the rail, not decorative superscripts.
   for (const id of new Set(markerIds)) {
     const marker = page.locator(`[data-cite-marker="${id}"]`).first();
     const href = await marker.getAttribute("href");
@@ -35,29 +33,59 @@ async function expectCitationIntegrity(page: Page) {
 }
 
 test.describe("home page", () => {
-  test("leads with the thesis and the four case studies", async ({ page }) => {
+  test("leads with the thesis, the portrait and both calls to action", async ({ page }) => {
     await page.goto("/");
 
     await expect(page.locator("h1")).toContainText("survive real users");
-    await expect(page.locator(".work-entry")).toHaveCount(CASE_STUDIES.length);
+    await expect(page.locator(".pill-status")).toBeVisible();
+    await expect(page.locator(".hero-portrait img")).toBeVisible();
+    await expect(page.locator('.hero-actions a[href^="mailto:"]')).toBeVisible();
+    await expect(page.locator('.hero-actions a[href="/resume.pdf"]')).toBeVisible();
+  });
 
+  test("carries every section the nav promises", async ({ page }) => {
+    await page.goto("/");
+
+    // Each nav anchor must resolve to a real section on the page.
+    const hrefs = await page.$$eval(".nav-links a[href^='#']", (nodes) =>
+      nodes.map((node) => node.getAttribute("href") ?? ""),
+    );
+    expect(hrefs.length, "nav exposes section links").toBeGreaterThan(0);
+    for (const href of hrefs) {
+      await expect(page.locator(href), `${href} exists`).toHaveCount(1);
+    }
+  });
+
+  test("shows four work cards, three roles and the full stack", async ({ page }) => {
+    await page.goto("/");
+
+    await expect(page.locator("#work a.card")).toHaveCount(CASE_STUDIES.length);
     for (const slug of CASE_STUDIES) {
-      await expect(page.locator(`a.work-entry[href="/work/${slug}"]`)).toHaveCount(1);
+      await expect(page.locator(`a.card[href="/work/${slug}"]`)).toHaveCount(1);
     }
 
-    // Contact is reachable without scrolling into a form.
-    await expect(page.locator('a[href^="mailto:"]')).toHaveCount(1);
-    await expect(page.locator('a[href="/resume.pdf"]').first()).toBeVisible();
+    await expect(page.locator(".timeline-item")).toHaveCount(3);
+    // Every role states its dates, its stack and at least one bullet.
+    for (const item of await page.locator(".timeline-item").all()) {
+      await expect(item.locator(".when")).not.toBeEmpty();
+      expect(await item.locator(".pill").count()).toBeGreaterThan(0);
+      expect(await item.locator(".bullets li").count()).toBeGreaterThan(0);
+    }
+
+    await expect(page.locator("#stack .stack-group")).toHaveCount(4);
+    await expect(page.locator("#background .edu-item")).toHaveCount(3);
+  });
+
+  test("the metrics marquee duplicates its track so the loop is seamless", async ({ page }) => {
+    await page.goto("/");
+    // Two groups, and the duplicate is hidden from assistive tech.
+    await expect(page.locator(".marquee-group")).toHaveCount(2);
+    await expect(page.locator('.marquee-group[aria-hidden="true"]')).toHaveCount(1);
   });
 
   test("shows no diagrams — those are the reward for clicking through", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("svg.dg")).toHaveCount(0);
-  });
-
-  test("cites its own sources", async ({ page }) => {
-    await page.goto("/");
-    await expectCitationIntegrity(page);
   });
 });
 
@@ -99,9 +127,13 @@ test.describe("case studies", () => {
   });
 });
 
-test.describe("both themes paint their own ground", () => {
+test.describe("the page paints its own ground", () => {
+  // The design commits to dark, so it must look deliberate under either system
+  // preference rather than inheriting the host's colours.
   for (const colorScheme of ["light", "dark"] as const) {
-    test(`body has an opaque background in ${colorScheme}`, async ({ page }) => {
+    test(`body is opaque and legible under prefers-color-scheme: ${colorScheme}`, async ({
+      page,
+    }) => {
       await page.emulateMedia({ colorScheme });
       await page.goto("/");
 
@@ -111,10 +143,7 @@ test.describe("both themes paint their own ground", () => {
       expect(background).not.toBe("rgba(0, 0, 0, 0)");
       expect(background).not.toBe("transparent");
 
-      // And text must not be the same colour as the ground it sits on.
-      const ink = await page.evaluate(
-        () => getComputedStyle(document.querySelector("h1")!).color,
-      );
+      const ink = await page.evaluate(() => getComputedStyle(document.body).color);
       expect(ink).not.toBe(background);
     });
   }
@@ -139,13 +168,24 @@ test.describe("accessibility", () => {
   // sampling mid-fade reports blended colours instead of the real palette.
   test.use({ reducedMotion: "reduce" });
 
-  for (const path of PAGES.slice(0, 2)) {
+  for (const path of ["/", "/work/ember"]) {
     test(`${path} has no serious axe violations`, async ({ page }) => {
       await page.goto(path);
-      // Belt and braces alongside reducedMotion: never sample a fading element,
-      // whose blended colour is not the palette's colour.
-      await page.waitForFunction(() =>
-        document.getAnimations().every((animation) => animation.playState === "finished"),
+      // Wait out the load-in stagger so contrast is sampled on settled colours.
+      // Infinite animations (the metrics marquee) are excluded by definition:
+      // they never reach "finished", and they are not a transient state.
+      await page.waitForFunction(
+        () =>
+          document
+            .getAnimations()
+            .filter((animation) => {
+              const effect = animation.effect;
+              if (!effect || !("getTiming" in effect)) return true;
+              return effect.getTiming().iterations !== Infinity;
+            })
+            .every((animation) => animation.playState === "finished"),
+        null,
+        { timeout: 10_000 },
       );
       const { violations } = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])

@@ -1,21 +1,27 @@
 import Link from "next/link";
-import { Masthead } from "@/components/masthead";
+import { SiteNav } from "@/components/site-nav";
 
 export default function NotFound() {
   return (
-    <main className="shell page">
-      <Masthead />
-      <section className="hero">
-        <h1 className="hero-headline">That page isn&rsquo;t here.</h1>
+    <>
+      <SiteNav sections={false} />
+      <main className="shell section">
+        <p className="section-label">404</p>
+        <h1 className="hero-title" style={{ marginTop: "0.5rem" }}>
+          That page isn&rsquo;t here.
+        </h1>
         <p className="hero-lede">
-          The link may be old, or the address slightly off. The selected work is one click away.
+          The link may be old, or the address slightly off. The work is one click away.
         </p>
-        <p style={{ marginTop: "1.75rem" }}>
-          <Link className="crumb" href="/">
-            &larr; Selected work
+        <div className="hero-actions">
+          <Link className="btn btn-primary btn-lg" href="/#work">
+            Selected work →
           </Link>
-        </p>
-      </section>
-    </main>
+          <Link className="btn btn-ghost btn-lg" href="/">
+            Home
+          </Link>
+        </div>
+      </main>
+    </>
   );
 }
