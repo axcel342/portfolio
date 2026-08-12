@@ -1,3 +1,5 @@
+import { resolveSiteUrl } from "@/lib/site-url";
+
 export const profile = {
   name: "Momin Imran Qureshi",
   role: "AI Engineer",
@@ -9,8 +11,12 @@ export const profile = {
     linkedin: "https://www.linkedin.com/in/momin-imran-qureshi",
     resume: "/resume.pdf",
   },
-  /** Overridden per deployment; the fallback keeps local builds and tests honest. */
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  /**
+   * Derived from the deployment unless NEXT_PUBLIC_SITE_URL overrides it, so a
+   * Vercel deploy needs no configuration and a bad value can never fail the
+   * build. See src/lib/site-url.ts.
+   */
+  siteUrl: resolveSiteUrl(process.env),
   tagline:
     "AI engineer building production LLM and agent systems — retrieval, orchestration, tool use, and the evaluation that proves they work.",
 } as const;
