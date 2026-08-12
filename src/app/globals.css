@@ -1,0 +1,713 @@
+@import "tailwindcss";
+
+/* ============================================================
+   TOKENS
+   The @theme block is the canonical light palette. The dark
+   overrides below redefine these same custom properties rather
+   than introducing a parallel set, so every utility generated
+   from a token stays correct in both themes without `dark:`
+   variants scattered through the markup.
+   ============================================================ */
+@theme {
+  --color-paper: #f3f1ea;
+  --color-paper-2: #edeae0;
+  --color-ink: #17160f;
+  /* Both greys clear 4.5:1 on paper — 6.0:1 and 4.6:1. Hierarchy comes from
+     size, case and weight, not from letting the quiet tone fall out of spec. */
+  --color-ink-soft: #5f5b4e;
+  --color-ink-faint: #726d5d;
+  --color-rule: #d9d3c4;
+  --color-rule-soft: #e4dfd1;
+  --color-cite: #26418f;
+  --color-cite-wash: #e1e6f3;
+
+  --font-serif: var(--font-newsreader), "Iowan Old Style", Charter, Georgia, serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  --measure: 66ch;
+}
+
+/* System preference dark. Guarded so an explicit light choice beats a dark OS. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-paper: #131208;
+    --color-paper-2: #1a190e;
+    --color-ink: #efece1;
+    --color-ink-soft: #9c9583;
+    --color-ink-faint: #837c69;
+    --color-rule: #2e2b1f;
+    --color-rule-soft: #262318;
+    --color-cite: #a2b6ee;
+    --color-cite-wash: #1b2138;
+  }
+}
+
+/* Explicit choice wins in the other direction too. */
+:root[data-theme="dark"] {
+  --color-paper: #131208;
+  --color-paper-2: #1a190e;
+  --color-ink: #efece1;
+  --color-ink-soft: #9c9583;
+  --color-ink-faint: #837c69;
+  --color-rule: #2e2b1f;
+  --color-rule-soft: #262318;
+  --color-cite: #a2b6ee;
+  --color-cite-wash: #1b2138;
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    /* Explicit, token-derived. A transparent body borrows the host's ground. */
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-serif);
+    font-size: 1.0625rem;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-cite-wash);
+    color: var(--color-ink);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-cite);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+}
+
+/* ============================================================
+   COMPONENTS
+   Semantic classes, written CSS-first against the tokens above.
+   ============================================================ */
+@layer components {
+  /* ---------- shell ---------- */
+  .shell {
+    max-width: 60rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  .page {
+    padding-block: 3.5rem 6rem;
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid var(--color-ink);
+  }
+
+  .masthead-name {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .masthead-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.15rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-ink-soft);
+  }
+
+  .masthead-links a {
+    border-bottom: 1px solid transparent;
+    transition: color 120ms ease, border-color 120ms ease;
+  }
+
+  .masthead-links a:hover {
+    color: var(--color-cite);
+    border-bottom-color: var(--color-cite);
+  }
+
+  .availability {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--color-cite);
+  }
+
+  .availability::before {
+    content: "";
+    inline-size: 0.42rem;
+    block-size: 0.42rem;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  /* ---------- hero ---------- */
+  .hero {
+    padding-block: 3.25rem 0;
+  }
+
+  .hero-headline {
+    margin: 0;
+    font-weight: 400;
+    font-size: clamp(2.15rem, 5.6vw, 3.4rem);
+    line-height: 1.06;
+    letter-spacing: -0.025em;
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+
+  .hero-headline em {
+    font-style: italic;
+  }
+
+  .hero-lede {
+    margin: 1.5rem 0 0;
+    max-width: 58ch;
+    font-size: 1.1875rem;
+    color: var(--color-ink-soft);
+  }
+
+  /* ---------- section heads ---------- */
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 3.75rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--color-rule);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-ink-faint);
+  }
+
+  .section-head h2 {
+    margin: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    color: var(--color-ink);
+  }
+
+  /* ---------- citations ---------- */
+  .cite-marker {
+    font-family: var(--font-mono);
+    font-size: 0.6em;
+    line-height: 1;
+    vertical-align: 0.48em;
+    letter-spacing: 0;
+    color: var(--color-cite);
+    background: var(--color-cite-wash);
+    padding: 0.1em 0.25em;
+    margin-inline-start: 0.1em;
+    border-radius: 2px;
+    transition: background-color 120ms ease;
+  }
+
+  .cite-marker:hover,
+  .cite-marker:focus-visible {
+    background: var(--color-cite);
+    color: var(--color-paper);
+  }
+
+  .rail {
+    margin-top: 2.25rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--color-rule);
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    max-width: 64ch;
+  }
+
+  .rail-label {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-ink-faint);
+    margin-bottom: 0.2rem;
+  }
+
+  .rail-entry {
+    display: grid;
+    grid-template-columns: 1.35rem minmax(0, 1fr);
+    gap: 0.65rem;
+    margin: 0;
+    font-size: 0.86rem;
+    line-height: 1.55;
+    color: var(--color-ink-soft);
+    scroll-margin-top: 3rem;
+  }
+
+  .rail-entry > span:first-child {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    color: var(--color-cite);
+    padding-top: 0.22rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Highlight the source a reader is pointing at. */
+  .rail-entry:target,
+  .rail-entry.is-active {
+    color: var(--color-ink);
+  }
+
+  /* ---------- work list ---------- */
+  .work-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .work-entry {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 0.4rem 1.5rem;
+    padding-block: 1.35rem;
+    border-bottom: 1px solid var(--color-rule-soft);
+  }
+
+  .work-entry h3 {
+    margin: 0;
+    font-weight: 400;
+    font-size: 1.35rem;
+    letter-spacing: -0.012em;
+  }
+
+  .work-entry-year {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
+    color: var(--color-ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .work-entry p {
+    grid-column: 1;
+    margin: 0.2rem 0 0;
+    max-width: 58ch;
+    font-size: 1rem;
+    color: var(--color-ink-soft);
+  }
+
+  .work-entry-more {
+    grid-column: 1;
+    margin-top: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-cite);
+  }
+
+  .work-entry:hover h3 {
+    color: var(--color-cite);
+  }
+
+  /* ---------- compact lists ---------- */
+  .compact {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .compact-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 0.25rem 1.5rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--color-rule-soft);
+  }
+
+  .compact-row h3 {
+    margin: 0;
+    font-weight: 400;
+    font-size: 1.08rem;
+  }
+
+  .compact-row .role {
+    grid-column: 1;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--color-ink-soft);
+  }
+
+  .compact-row p {
+    grid-column: 1;
+    margin: 0.3rem 0 0;
+    max-width: 60ch;
+    font-size: 0.97rem;
+    color: var(--color-ink-soft);
+  }
+
+  .compact-row .when {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    color: var(--color-ink-faint);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .stack-line {
+    grid-column: 1;
+    margin-top: 0.55rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1.7;
+    color: var(--color-ink-faint);
+  }
+
+  /* ---------- contact ---------- */
+  .contact {
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-ink);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+  }
+
+  .contact-line {
+    margin: 0;
+    font-size: 1.3rem;
+    max-width: 34ch;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .contact-links a,
+  .contact-links button {
+    color: var(--color-cite);
+    background: none;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    padding: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    cursor: pointer;
+  }
+
+  .contact-links a:hover,
+  .contact-links button:hover {
+    border-bottom-color: var(--color-cite);
+  }
+
+  /* ---------- case study ---------- */
+  .crumb {
+    display: inline-block;
+    margin-bottom: 1.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-cite);
+  }
+
+  .crumb:hover {
+    border-bottom: 1px solid var(--color-cite);
+  }
+
+  .case-title {
+    margin: 0;
+    font-weight: 400;
+    font-size: clamp(1.9rem, 4.4vw, 2.65rem);
+    line-height: 1.1;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+
+  .case-dek {
+    margin: 0.9rem 0 0;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--color-ink-soft);
+    max-width: 48ch;
+  }
+
+  .case-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+    gap: 1.1rem 1.75rem;
+    margin: 2rem 0 0;
+    padding-block: 1.1rem;
+    border-top: 1px solid var(--color-ink);
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .case-meta > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .case-meta dt {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-faint);
+  }
+
+  .case-meta dd {
+    margin: 0;
+    font-size: 0.94rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .figure {
+    margin: 2.5rem 0 0;
+  }
+
+  .figure-frame {
+    border: 1px solid var(--color-rule);
+    background: var(--color-paper-2);
+    padding: 1.35rem;
+    overflow-x: auto;
+  }
+
+  .figure svg {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    min-inline-size: 20rem;
+  }
+
+  .figure figcaption {
+    margin-top: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-ink-faint);
+  }
+
+  .prose {
+    margin-top: 2.5rem;
+    max-width: var(--measure);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .prose h2 {
+    margin: 1.9rem 0 0.65rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-ink-faint);
+  }
+
+  .prose h2:first-child {
+    margin-top: 0;
+  }
+
+  .prose p {
+    margin: 0 0 0.95rem;
+  }
+
+  .prose p:last-child {
+    margin-bottom: 0;
+  }
+
+  .prose strong {
+    font-weight: 600;
+  }
+
+  .pager {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-top: 3.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-ink);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-ink-faint);
+  }
+
+  .pager a {
+    color: var(--color-cite);
+  }
+
+  .pager a:hover {
+    border-bottom: 1px solid var(--color-cite);
+  }
+
+  /* ---------- diagrams ----------
+     Diagram colour lives in classes, not presentation attributes, so one
+     drawing reads correctly in both themes. */
+  .dg text {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.07em;
+    fill: var(--color-ink);
+  }
+
+  .dg .t-accent {
+    fill: var(--color-cite);
+  }
+
+  .dg .t-faint {
+    fill: var(--color-ink-faint);
+    font-size: 8px;
+    letter-spacing: 0.1em;
+  }
+
+  .dg .box {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 1;
+  }
+
+  .dg .box-accent {
+    fill: var(--color-cite-wash);
+    stroke: var(--color-cite);
+    stroke-width: 1;
+  }
+
+  .dg .box-store {
+    fill: none;
+    stroke: var(--color-ink-faint);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+
+  .dg .edge {
+    fill: none;
+    stroke: var(--color-ink-soft);
+    stroke-width: 1;
+  }
+
+  .dg .edge-accent {
+    fill: none;
+    stroke: var(--color-cite);
+    stroke-width: 1;
+  }
+
+  .dg .edge-soft {
+    fill: none;
+    stroke: var(--color-ink-faint);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+
+  .dg .head {
+    fill: var(--color-ink-soft);
+    stroke: none;
+  }
+
+  .dg .head-accent {
+    fill: var(--color-cite);
+    stroke: none;
+  }
+}
+
+/* ============================================================
+   MOTION
+   Two moments only: a page-load stagger, and citation hover.
+   Anything scroll-triggered is deliberately absent.
+   ============================================================ */
+@layer utilities {
+  .enter {
+    animation: rise 520ms cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+  }
+
+  .enter-1 {
+    animation-delay: 40ms;
+  }
+
+  .enter-2 {
+    animation-delay: 140ms;
+  }
+
+  .enter-3 {
+    animation-delay: 240ms;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.6rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 40rem) {
+  .page {
+    padding-block: 2.25rem 4rem;
+  }
+
+  .work-entry,
+  .compact-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .work-entry-year,
+  .compact-row .when {
+    grid-row: 1;
+    order: -1;
+  }
+
+  .contact {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

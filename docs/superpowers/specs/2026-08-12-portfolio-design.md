@@ -52,11 +52,16 @@ toward the paper rather than a neutral mid-grey, and citation blue as the only a
 | `paper` | `#F3F1EA` | `#131208` |
 | `paper-2` (raised) | `#EDEAE0` | `#1A190E` |
 | `ink` | `#17160F` | `#EFECE1` |
-| `ink-soft` | `#6A6558` | `#9C9583` |
-| `ink-faint` | `#96907F` | `#6E6858` |
+| `ink-soft` | `#5F5B4E` | `#9C9583` |
+| `ink-faint` | `#726D5D` | `#837C69` |
 | `rule` | `#D9D3C4` | `#2E2B1F` |
 | `cite` (accent) | `#26418F` | `#A2B6EE` |
 | `cite-wash` | `#E1E6F3` | `#1B2138` |
+
+Both greys clear 4.5:1 against their ground in both themes — 6.0:1 and 4.6:1 on
+paper. The first draft used a lighter `ink-faint` at 2.8:1, which the axe pass
+caught across every mono label on the site. Tonal hierarchy comes from size,
+case and weight instead; a quiet tone is not a licence to fall out of spec.
 
 Explicitly rejected: terracotta on cream, which is the default accent every generated
 serif-on-paper page reaches for. Citation blue is fountain-pen ink — it belongs to the journal
@@ -173,8 +178,9 @@ missing its `decision` section fails to compile.
 
 ```
 src/content/
-  profile.ts              Name, headline, lede, links, availability
-  work.ts                 Ordered project index — slug, title, year, summary, featured flag
+  profile.ts              Name, links, availability, tagline
+  work.ts                 Ordered project index — slug, title, year (pure routing data)
+  home.tsx                Headline, lede, per-project summaries, and the home page's sources
   experience.ts           Three roles
   background.ts           Education and certifications
   case-studies/

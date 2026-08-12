@@ -1,0 +1,7 @@
+# pnpm 11 reads settings from here, not from package.json.
+# All three ship native binaries or postinstall steps we actually need:
+# esbuild (vitest), sharp (next/image optimisation), unrs-resolver (eslint).
+allowBuilds:
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
