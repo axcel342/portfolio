@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { MicrosoftMark } from "@/components/logos";
 import { headline, lede } from "@/content/home";
 import { profile } from "@/content/profile";
 
@@ -40,7 +41,10 @@ export function Hero() {
               sizes="(max-width: 62rem) 15rem, 21rem"
             />
           </div>
-          <span className="hero-badge">{profile.badge}</span>
+          <span className="hero-badge">
+            <MicrosoftMark size={14} />
+            {profile.badge}
+          </span>
         </div>
       ) : null}
     </section>

@@ -76,6 +76,47 @@ test.describe("home page", () => {
     await expect(page.locator("#background .edu-item")).toHaveCount(3);
   });
 
+  test("background sits directly under the work cards", async ({ page }) => {
+    await page.goto("/");
+
+    const order = await page.$$eval("main section[id]", (nodes) =>
+      nodes.map((node) => node.id),
+    );
+    expect(order.slice(0, 3)).toEqual(["work", "background", "experience"]);
+
+    // The nav must read in the same order the page does.
+    const navOrder = await page.$$eval(".nav-links a[href^='#']", (nodes) =>
+      nodes.map((node) => (node.getAttribute("href") ?? "").slice(1)),
+    );
+    expect(navOrder).toEqual(["work", "background", "experience", "stack"]);
+  });
+
+  test("every credential carries its issuer's logo, marked decorative", async ({ page }) => {
+    await page.goto("/");
+
+    // One tile per card, and the ids identify which mark is which.
+    const ids = await page.$$eval("#background .logo-tile", (nodes) =>
+      nodes.map((node) => (node as HTMLElement).dataset.logo ?? ""),
+    );
+    expect(ids).toEqual(["fast-nu", "microsoft", "huggingface"]);
+
+    // The Microsoft mark also appears on the portrait badge.
+    await expect(page.locator(".hero-badge svg")).toHaveCount(1);
+
+    // Logos are decorative: adjacent text already names the organisation, so an
+    // announced logo would only be noise. Images use alt="", marks aria-hidden.
+    const imageAlts = await page.$$eval("#background .logo-tile img", (nodes) =>
+      nodes.map((node) => node.getAttribute("alt")),
+    );
+    expect(imageAlts.every((alt) => alt === "")).toBe(true);
+
+    const svgHidden = await page.$$eval(
+      "#background .logo-tile svg, .hero-badge svg",
+      (nodes) => nodes.map((node) => node.getAttribute("aria-hidden")),
+    );
+    expect(svgHidden.every((hidden) => hidden === "true")).toBe(true);
+  });
+
   test("the metrics marquee duplicates its track so the loop is seamless", async ({ page }) => {
     await page.goto("/");
     // Two groups, and the duplicate is hidden from assistive tech.

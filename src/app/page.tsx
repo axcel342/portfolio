@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Hero } from "@/components/hero";
+import { LogoTile } from "@/components/logo-tile";
 import { MetricMarquee } from "@/components/marquee";
 import { SiteNav } from "@/components/site-nav";
 import { alsoBuilt, certifications, contact, education } from "@/content/home";
@@ -56,6 +57,25 @@ export default function HomePage() {
 
                 <span className="card-more">Read the case study →</span>
               </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* ---------------- background ----------------
+            Sits directly under the work cards so a reader meets the credentials
+            straight after the proof, rather than near the footer. */}
+        <section id="background" className="shell section">
+          <p className="section-label">Background</p>
+          <h2 className="section-title">Education &amp; certifications</h2>
+
+          <div className="edu-grid">
+            {[...education, ...certifications].map((item) => (
+              <div key={item.title} className="edu-item">
+                {item.logo ? <LogoTile logo={item.logo} /> : null}
+                <span className="where">{item.when}</span>
+                <h3>{item.title}</h3>
+                <p>{item.detail}</p>
+              </div>
             ))}
           </div>
         </section>
@@ -150,29 +170,6 @@ export default function HomePage() {
                   </div>
                 ) : null}
               </article>
-            ))}
-          </div>
-        </section>
-
-        {/* ---------------- background ---------------- */}
-        <section id="background" className="shell section">
-          <p className="section-label">Background</p>
-          <h2 className="section-title">Education &amp; certifications</h2>
-
-          <div className="edu-grid">
-            {education.map((item) => (
-              <div key={item.title} className="edu-item">
-                <span className="where">{item.when}</span>
-                <h3>{item.title}</h3>
-                <p>{item.detail}</p>
-              </div>
-            ))}
-            {certifications.map((item) => (
-              <div key={item.title} className="edu-item">
-                <span className="where">{item.when}</span>
-                <h3>{item.title}</h3>
-                <p>{item.detail}</p>
-              </div>
             ))}
           </div>
         </section>

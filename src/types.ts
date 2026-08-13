@@ -1,4 +1,5 @@
 import type { ComponentType, ReactElement, ReactNode } from "react";
+import type { MarkName } from "@/components/logos";
 
 export const CASE_STUDY_SLUGS = ["ember", "kimport", "anti-fragility", "halil"] as const;
 
@@ -47,11 +48,27 @@ export type WorkIndexEntry = {
   readonly stack: readonly string[];
 };
 
+/**
+ * A logo is either an inline mark drawn in components/logos.tsx or an image file
+ * dropped in public/logos. `id` exists so tests and debugging can identify a
+ * tile without relying on the image filename.
+ */
+export type Logo =
+  | {
+      readonly kind: "image";
+      readonly id: string;
+      readonly src: string;
+      readonly width: number;
+      readonly height: number;
+    }
+  | { readonly kind: "mark"; readonly id: string; readonly mark: MarkName };
+
 export type CompactItem = {
   readonly title: string;
   readonly when: string;
   readonly detail: string;
   readonly stack?: readonly string[];
+  readonly logo?: Logo;
 };
 
 export type Role = {

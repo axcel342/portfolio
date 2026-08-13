@@ -38,7 +38,8 @@ export const education: readonly CompactItem[] = [
     title: "BSc Computer Science",
     when: "Jun 2024",
     detail:
-      "National University of Computer and Emerging Sciences, Lahore. Dean’s List of Honour, Fall 2023. Coursework in information retrieval, massive data mining, artificial intelligence and bioinformatics.",
+      "FAST National University of Computer and Emerging Sciences, Lahore. Dean’s List of Honour, Fall 2023. Coursework in information retrieval, massive data mining, artificial intelligence and bioinformatics.",
+    logo: { kind: "image", id: "fast-nu", src: "/logos/fast-nu.png", width: 198, height: 198 },
   },
 ];
 
@@ -47,11 +48,13 @@ export const certifications: readonly CompactItem[] = [
     title: "Microsoft Certified: Azure AI Engineer Associate",
     when: "AI-102",
     detail: "Designing and implementing Azure AI solutions.",
+    logo: { kind: "mark", id: "microsoft", mark: "microsoft" },
   },
   {
     title: "Hugging Face: AI Agents Fundamentals",
     when: "Certificate",
     detail: "Agent design, tool use and orchestration patterns.",
+    logo: { kind: "mark", id: "huggingface", mark: "huggingface" },
   },
 ];
 

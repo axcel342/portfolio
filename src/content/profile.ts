@@ -25,7 +25,10 @@ export const profile = {
   email: "mominimran000@gmail.com",
   phone: "+92 321-8336629",
   portrait: findPortrait(),
-  /** A real credential from the CV, not a manufactured accolade. */
+  /**
+   * A real credential from the CV, not a manufactured accolade. The Microsoft
+   * mark rendered beside it names the issuer.
+   */
   badge: "Azure AI Engineer · AI-102",
   links: {
     github: "https://github.com/axcel342",
@@ -42,10 +45,11 @@ export const profile = {
     "AI engineer building production LLM and agent systems — retrieval, orchestration, tool use, and the evaluation that proves they work.",
 } as const;
 
+/** Kept in page order, so the nav reads top to bottom the way the page does. */
 export const navSections: readonly NavSection[] = [
   { id: "work", label: "Work" },
+  { id: "background", label: "Background" },
   { id: "experience", label: "Experience" },
   { id: "stack", label: "Stack" },
-  { id: "background", label: "Background" },
   // No "Contact" entry — the nav's primary button already goes there.
 ];
