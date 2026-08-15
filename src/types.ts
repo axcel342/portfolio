@@ -69,6 +69,24 @@ export type CompactItem = {
   readonly detail: string;
   readonly stack?: readonly string[];
   readonly logo?: Logo;
+  /** Where the credential can be verified, when there is one. */
+  readonly href?: string;
+};
+
+/** One cell of the hiring strip under the call to action. */
+export type Fact = {
+  readonly label: string;
+  readonly value: string;
+  readonly detail?: string;
+  readonly href?: string;
+  /** Availability gets the accent, because it is the cell that decides contact. */
+  readonly live?: boolean;
+};
+
+export type Capability = {
+  readonly title: string;
+  readonly body: string;
+  readonly proof: string;
 };
 
 export type Role = {

@@ -49,12 +49,16 @@ export const certifications: readonly CompactItem[] = [
     when: "AI-102",
     detail: "Designing and implementing Azure AI solutions.",
     logo: { kind: "mark", id: "microsoft", mark: "microsoft" },
+    // Straight to the issuer rather than through LinkedIn's redirect wrapper:
+    // more trustworthy to a reader, and it survives LinkedIn's params expiring.
+    href: "https://learn.microsoft.com/api/credentials/share/en-us/MominImranQureshi-0804/9415DFC214F7DEBC",
   },
   {
     title: "Hugging Face: AI Agents Fundamentals",
     when: "Certificate",
     detail: "Agent design, tool use and orchestration patterns.",
     logo: { kind: "mark", id: "huggingface", mark: "huggingface" },
+    href: "https://huggingface.co/datasets/agents-course/certificates/resolve/main/certificates/Axcel1/2025-06-14.png",
   },
 ];
 

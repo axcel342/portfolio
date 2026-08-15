@@ -1,8 +1,9 @@
 import Link from "next/link";
+import { FactBar } from "@/components/fact-bar";
 import { Hero } from "@/components/hero";
 import { LogoTile } from "@/components/logo-tile";
-import { MetricMarquee } from "@/components/marquee";
 import { SiteNav } from "@/components/site-nav";
+import { capabilities } from "@/content/capabilities";
 import { alsoBuilt, certifications, contact, education } from "@/content/home";
 import { experience } from "@/content/experience";
 import { profile } from "@/content/profile";
@@ -15,7 +16,7 @@ export default function HomePage() {
       <SiteNav />
       <main>
         <Hero />
-        <MetricMarquee />
+        <FactBar />
 
         {/* ---------------- work ---------------- */}
         <section id="work" className="shell section">
@@ -75,7 +76,36 @@ export default function HomePage() {
                 <span className="where">{item.when}</span>
                 <h3>{item.title}</h3>
                 <p>{item.detail}</p>
+                {item.href ? (
+                  <a
+                    className="credential-link"
+                    href={item.href}
+                    rel="noreferrer noopener"
+                    target="_blank"
+                  >
+                    Verify credential <span aria-hidden="true">↗</span>
+                  </a>
+                ) : null}
               </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ---------------- what I can build ---------------- */}
+        <section id="services" className="shell section">
+          <p className="section-label">What I can build for you</p>
+          <h2 className="section-title">Three problems I solve</h2>
+          <p className="section-note">
+            Each one closed by evidence from work that shipped, not a description of a service.
+          </p>
+
+          <div className="card-grid card-grid-3">
+            {capabilities.map((capability) => (
+              <article key={capability.title} className="card">
+                <h3>{capability.title}</h3>
+                <p>{capability.body}</p>
+                <span className="card-proof">{capability.proof}</span>
+              </article>
             ))}
           </div>
         </section>

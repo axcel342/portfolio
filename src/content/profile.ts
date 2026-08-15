@@ -30,6 +30,8 @@ export const profile = {
    * mark rendered beside it names the issuer.
    */
   badge: "Azure AI Engineer · AI-102",
+  badgeHref:
+    "https://learn.microsoft.com/api/credentials/share/en-us/MominImranQureshi-0804/9415DFC214F7DEBC",
   links: {
     github: "https://github.com/axcel342",
     linkedin: "https://www.linkedin.com/in/momin-imran-qureshi",
@@ -49,6 +51,7 @@ export const profile = {
 export const navSections: readonly NavSection[] = [
   { id: "work", label: "Work" },
   { id: "background", label: "Background" },
+  { id: "services", label: "Services" },
   { id: "experience", label: "Experience" },
   { id: "stack", label: "Stack" },
   // No "Contact" entry — the nav's primary button already goes there.

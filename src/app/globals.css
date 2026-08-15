@@ -335,6 +335,10 @@
     flex: none;
   }
 
+  .hero-badge:hover {
+    border-color: color-mix(in oklab, var(--color-cyan) 55%, var(--color-border));
+  }
+
   .hero-badge {
     position: absolute;
     inset-block-start: 1rem;
@@ -354,65 +358,71 @@
     white-space: nowrap;
   }
 
-  /* ---------- metrics marquee ---------- */
-  .marquee {
+  /* ---------- hiring facts strip ----------
+     Sits directly under the call to action. Static on purpose: a reader spends
+     about four seconds here, and motion fights that. */
+  .factbar {
     position: relative;
     z-index: 1;
     border-block: 1px solid var(--color-border-soft);
     background: var(--color-surface);
-    overflow: hidden;
-    padding-block: 0.95rem;
   }
 
-  .marquee-track {
+  /* Explicit column counts, not auto-fit: six cells auto-fitted leave the last
+     one orphaned on its own row. Three across gives each value room to sit on
+     one line. */
+  .factbar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.35rem 2.5rem;
+    max-width: var(--shell);
+    margin: 0 auto;
+    padding: 1.4rem 1.5rem 1.5rem;
+  }
+
+  .fact {
     display: flex;
-    inline-size: max-content;
-    gap: 0;
-    animation: slide 42s linear infinite;
+    flex-direction: column;
+    gap: 0.28rem;
+    min-inline-size: 0;
   }
 
-  .marquee:hover .marquee-track {
-    animation-play-state: paused;
+  .fact dt {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-faint);
   }
 
-  .marquee-group {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
+  .fact dd {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
   }
 
-  .marquee-item {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.5rem;
-    padding-inline: 1.5rem;
-    white-space: nowrap;
-    font-size: 0.9rem;
+  .fact dd small {
+    display: block;
+    font-weight: 400;
+    font-size: 0.82rem;
+    letter-spacing: 0;
     color: var(--color-muted);
   }
 
-  .marquee-item b {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.05rem;
-    color: var(--color-text);
-    font-variant-numeric: tabular-nums;
+  .fact dd a {
+    border-bottom: 1px solid transparent;
+    transition: color 140ms ease, border-color 140ms ease;
   }
 
-  .marquee-item::after {
-    content: "✦";
-    margin-inline-start: 1.5rem;
-    color: var(--color-violet);
-    font-size: 0.7rem;
+  .fact dd a:hover {
+    color: var(--color-cyan);
+    border-bottom-color: var(--color-cyan);
   }
 
-  @keyframes slide {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-50%);
-    }
+  .fact-live dd {
+    color: var(--color-cyan);
   }
 
   /* ---------- cards ---------- */
@@ -424,6 +434,11 @@
     grid-template-columns: repeat(auto-fit, minmax(min(24rem, 100%), 1fr));
     gap: 1.25rem;
     margin-top: 2.25rem;
+  }
+
+  /* Three cards, three columns — 24rem tracks would leave the third orphaned. */
+  .card-grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
   }
 
   .card {
@@ -476,6 +491,33 @@
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--color-cyan);
+  }
+
+  /* The one piece of evidence that closes a capability card. */
+  .card-proof {
+    margin-top: auto;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--color-border-soft);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    color: var(--color-cyan);
+  }
+
+  .credential-link {
+    display: inline-block;
+    margin-top: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-cyan);
+    border-bottom: 1px solid transparent;
+    transition: border-color 140ms ease;
+  }
+
+  .credential-link:hover {
+    border-bottom-color: var(--color-cyan);
   }
 
   /* ---------- pills ---------- */
@@ -1100,11 +1142,6 @@
     animation: none;
   }
 
-  /* The marquee becomes a static, readable row rather than disappearing. */
-  .marquee-track {
-    animation: none;
-  }
-
   *,
   *::before,
   *::after {
@@ -1133,6 +1170,12 @@
   }
 }
 
+@media (max-width: 52rem) {
+  .factbar-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 40rem) {
   .section {
     padding-block: 3.25rem;
@@ -1156,5 +1199,9 @@
 
   .hero-badge {
     inset-inline-end: 0.5rem;
+  }
+
+  .factbar-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

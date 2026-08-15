@@ -82,13 +82,51 @@ test.describe("home page", () => {
     const order = await page.$$eval("main section[id]", (nodes) =>
       nodes.map((node) => node.id),
     );
-    expect(order.slice(0, 3)).toEqual(["work", "background", "experience"]);
+    expect(order.slice(0, 4)).toEqual(["work", "background", "services", "experience"]);
 
-    // The nav must read in the same order the page does.
+    // The nav must read in the same order the page does. Asserted as a
+    // subsequence, so the nav can omit a section without breaking.
     const navOrder = await page.$$eval(".nav-links a[href^='#']", (nodes) =>
       nodes.map((node) => (node.getAttribute("href") ?? "").slice(1)),
     );
-    expect(navOrder).toEqual(["work", "background", "experience", "stack"]);
+    expect(navOrder.length).toBeGreaterThan(0);
+    expect(navOrder.every((id) => order.includes(id)), "every nav link targets a section").toBe(
+      true,
+    );
+    const positions = navOrder.map((id) => order.indexOf(id));
+    expect(
+      positions.every((pos, i) => i === 0 || pos > positions[i - 1]!),
+      "nav links follow page order",
+    ).toBe(true);
+  });
+
+  test("credentials link to the issuer, not to a redirect wrapper", async ({ page }) => {
+    await page.goto("/");
+
+    const links = await page.$$eval("#background .credential-link", (nodes) =>
+      nodes.map((node) => ({
+        href: node.getAttribute("href") ?? "",
+        rel: node.getAttribute("rel") ?? "",
+        target: node.getAttribute("target") ?? "",
+      })),
+    );
+    expect(links).toHaveLength(2);
+
+    const hosts = links.map((link) => new URL(link.href).host);
+    expect(hosts).toEqual(["learn.microsoft.com", "huggingface.co"]);
+
+    for (const link of links) {
+      expect(link.href.startsWith("https://")).toBe(true);
+      // A LinkedIn wrapper would rot when its tracking params expire.
+      expect(link.href).not.toContain("linkedin.com");
+      expect(link.target).toBe("_blank");
+      expect(link.rel).toContain("noopener");
+    }
+
+    // The portrait badge claims the same credential, so it verifies too.
+    const badge = page.locator("a.hero-badge");
+    await expect(badge).toHaveCount(1);
+    expect(await badge.getAttribute("href")).toContain("learn.microsoft.com");
   });
 
   test("every credential carries its issuer's logo, marked decorative", async ({ page }) => {
@@ -117,11 +155,49 @@ test.describe("home page", () => {
     expect(svgHidden.every((hidden) => hidden === "true")).toBe(true);
   });
 
-  test("the metrics marquee duplicates its track so the loop is seamless", async ({ page }) => {
+  test("the hiring strip answers availability first, and never scrolls", async ({ page }) => {
     await page.goto("/");
-    // Two groups, and the duplicate is hidden from assistive tech.
-    await expect(page.locator(".marquee-group")).toHaveCount(2);
-    await expect(page.locator('.marquee-group[aria-hidden="true"]')).toHaveCount(1);
+
+    const labels = await page.$$eval(".factbar .fact dt", (nodes) =>
+      nodes.map((node) => node.textContent?.trim() ?? ""),
+    );
+    expect(labels).toEqual([
+      "Available",
+      "Based",
+      "Experience",
+      "Builds",
+      "Clouds",
+      "Certified",
+    ]);
+
+    // Six cells laid out without orphaning one onto a row of its own.
+    const rowTops = await page.$$eval(".factbar .fact", (nodes) =>
+      nodes.map((node) => Math.round(node.getBoundingClientRect().top)),
+    );
+    const perRow = new Map<number, number>();
+    for (const top of rowTops) perRow.set(top, (perRow.get(top) ?? 0) + 1);
+    expect(
+      [...perRow.values()].every((count) => count > 1),
+      "no fact sits alone on its own row",
+    ).toBe(true);
+
+    // Static by design — the strip it replaced had to be chased to be read.
+    const animated = await page.evaluate(() =>
+      document.getAnimations().some((animation) => {
+        const target = animation.effect && "target" in animation.effect ? animation.effect.target : null;
+        return target instanceof Element && target.closest(".factbar") !== null;
+      }),
+    );
+    expect(animated, "the hiring strip must not animate").toBe(false);
+  });
+
+  test("the services section states three problems, each closed by evidence", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("#services .card")).toHaveCount(3);
+    await expect(page.locator("#services .card-proof")).toHaveCount(3);
+    for (const proof of await page.locator("#services .card-proof").all()) {
+      await expect(proof).not.toBeEmpty();
+    }
   });
 
   test("shows no diagrams — those are the reward for clicking through", async ({ page }) => {
@@ -213,8 +289,8 @@ test.describe("accessibility", () => {
     test(`${path} has no serious axe violations`, async ({ page }) => {
       await page.goto(path);
       // Wait out the load-in stagger so contrast is sampled on settled colours.
-      // Infinite animations (the metrics marquee) are excluded by definition:
-      // they never reach "finished", and they are not a transient state.
+      // Infinite animations are excluded by definition: they never reach
+      // "finished", and they are not a transient state.
       await page.waitForFunction(
         () =>
           document

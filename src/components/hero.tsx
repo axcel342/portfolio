@@ -41,10 +41,16 @@ export function Hero() {
               sizes="(max-width: 62rem) 15rem, 21rem"
             />
           </div>
-          <span className="hero-badge">
+          {/* The badge claims a credential, so it links to where it verifies. */}
+          <a
+            className="hero-badge"
+            href={profile.badgeHref}
+            rel="noreferrer noopener"
+            target="_blank"
+          >
             <MicrosoftMark size={14} />
             {profile.badge}
-          </span>
+          </a>
         </div>
       ) : null}
     </section>
