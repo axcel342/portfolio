@@ -105,6 +105,25 @@ Enforced by review, not by the compiler, and they matter more than the code:
 
 ## Deployment
 
-Vercel. Set `NEXT_PUBLIC_SITE_URL` only if you want to override the origin —
-otherwise it derives from `VERCEL_PROJECT_PRODUCTION_URL` or `VERCEL_URL`, so
-production and every preview get the right canonical host automatically.
+Live at **https://momin-imran-qureshi.vercel.app**, on Vercel.
+
+The GitHub repository is connected as a source, so **pushing to `main` deploys
+production** and every other branch gets its own preview URL. No manual step is
+needed. To deploy by hand anyway — a hotfix while CI is unhappy, say:
+
+```bash
+pnpm dlx vercel --prod
+```
+
+**Origin resolution:** set `NEXT_PUBLIC_SITE_URL` only to override. Otherwise it
+derives from `VERCEL_PROJECT_PRODUCTION_URL` or `VERCEL_URL`, so production and
+every preview get the right canonical host in metadata, `sitemap.xml` and
+`robots.txt` automatically.
+
+**Web Analytics** is enabled on the project and `<Analytics />` is mounted in the
+root layout. Verify it end to end by loading the site and checking that
+`/_vercel/insights/script.js` returns 200 and appears in the DOM — the tag is
+injected client-side, so it is deliberately absent from the server HTML.
+
+Speed Insights is available on the same project but not wired up; it needs the
+separate `@vercel/speed-insights` package and its own component.
