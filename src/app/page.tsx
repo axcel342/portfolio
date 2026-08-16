@@ -18,14 +18,20 @@ export default function HomePage() {
         <Hero />
         <FactBar />
 
-        {/* ---------------- work ---------------- */}
-        <section id="work" className="shell section">
-          <p className="section-label">Selected work</p>
-          <h2 className="section-title">Systems in production, not prototypes</h2>
-          <p className="section-note">
-            Four projects written up the way an engineer reads them — the problem, the architectural
-            decision I&rsquo;d defend, and what happened once real people used it.
-          </p>
+        {/* ---------------- work ----------------
+            One of the two sections that keeps the larger padding: it is where
+            the proof starts, so it earns the breath before it. */}
+        <section id="work" className="shell section section-major">
+          <div className="section-head">
+            <div>
+              <p className="section-label">Selected work</p>
+              <h2 className="section-title">Systems in production, not prototypes</h2>
+            </div>
+            <p className="section-note">
+              Four projects written up the way an engineer reads them — the problem, the
+              architectural decision I&rsquo;d defend, and what happened once real people used it.
+            </p>
+          </div>
 
           <div className="card-grid">
             {workIndex.map((entry) => (
@@ -60,32 +66,52 @@ export default function HomePage() {
               </Link>
             ))}
           </div>
+
+          {/* Second-tier projects, folded in under the cards. As a section of
+              their own they paid for an eyebrow, a title and 144px of padding
+              to carry two entries. */}
+          <div className="also-built">
+            <p className="section-label">Also built</p>
+            {alsoBuilt.map((item) => (
+              <article key={item.title} className="also-item">
+                <h3>{item.title}</h3>
+                <span className="when">{item.when}</span>
+                <p>{item.detail}</p>
+              </article>
+            ))}
+          </div>
         </section>
 
         {/* ---------------- background ----------------
             Sits directly under the work cards so a reader meets the credentials
             straight after the proof, rather than near the footer. */}
         <section id="background" className="shell section">
-          <p className="section-label">Background</p>
-          <h2 className="section-title">Education &amp; certifications</h2>
+          <div className="section-head">
+            <div>
+              <p className="section-label">Background</p>
+              <h2 className="section-title">Education &amp; certifications</h2>
+            </div>
+          </div>
 
           <div className="edu-grid">
             {[...education, ...certifications].map((item) => (
               <div key={item.title} className="edu-item">
                 {item.logo ? <LogoTile logo={item.logo} /> : null}
-                <span className="where">{item.when}</span>
-                <h3>{item.title}</h3>
-                <p>{item.detail}</p>
-                {item.href ? (
-                  <a
-                    className="credential-link"
-                    href={item.href}
-                    rel="noreferrer noopener"
-                    target="_blank"
-                  >
-                    Verify credential <span aria-hidden="true">↗</span>
-                  </a>
-                ) : null}
+                <div className="edu-body">
+                  <span className="where">{item.when}</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.detail}</p>
+                  {item.href ? (
+                    <a
+                      className="credential-link"
+                      href={item.href}
+                      rel="noreferrer noopener"
+                      target="_blank"
+                    >
+                      Verify credential <span aria-hidden="true">↗</span>
+                    </a>
+                  ) : null}
+                </div>
               </div>
             ))}
           </div>
@@ -93,11 +119,12 @@ export default function HomePage() {
 
         {/* ---------------- what I can build ---------------- */}
         <section id="services" className="shell section">
-          <p className="section-label">What I can build for you</p>
-          <h2 className="section-title">Three problems I solve</h2>
-          <p className="section-note">
-            Each one closed by evidence from work that shipped, not a description of a service.
-          </p>
+          <div className="section-head">
+            <div>
+              <p className="section-label">What I can build for you</p>
+              <h2 className="section-title">Three problems I solve</h2>
+            </div>
+          </div>
 
           <div className="card-grid card-grid-3">
             {capabilities.map((capability) => (
@@ -112,11 +139,15 @@ export default function HomePage() {
 
         {/* ---------------- experience ---------------- */}
         <section id="experience" className="shell section">
-          <p className="section-label">Experience</p>
-          <h2 className="section-title">Where I&rsquo;ve shipped</h2>
-          <p className="section-note">
-            Three companies since 2024, all of it AI engineering on live products.
-          </p>
+          <div className="section-head">
+            <div>
+              <p className="section-label">Experience</p>
+              <h2 className="section-title">Where I&rsquo;ve shipped</h2>
+            </div>
+            <p className="section-note">
+              Three companies since 2024, all of it AI engineering on live products.
+            </p>
+          </div>
 
           <div className="timeline">
             {experience.map((role) => (
@@ -154,11 +185,12 @@ export default function HomePage() {
 
         {/* ---------------- stack ---------------- */}
         <section id="stack" className="shell section">
-          <p className="section-label">The stack</p>
-          <h2 className="section-title">What I actually work in</h2>
-          <p className="section-note">
-            Everything listed here appears in shipped work, not on a reading list.
-          </p>
+          <div className="section-head">
+            <div>
+              <p className="section-label">The stack</p>
+              <h2 className="section-title">What I actually work in</h2>
+            </div>
+          </div>
 
           <div className="stack-grid">
             {stackGroups.map((group) => (
@@ -176,36 +208,10 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ---------------- also built ---------------- */}
-        <section className="shell section">
-          <p className="section-label">Also built</p>
-          <h2 className="section-title">Not written up, still real</h2>
-
-          <div className="card-grid">
-            {alsoBuilt.map((item) => (
-              <article key={item.title} className="card">
-                <div className="card-eyebrow">
-                  <span>Project</span>
-                  <span>{item.when}</span>
-                </div>
-                <h3>{item.title}</h3>
-                <p>{item.detail}</p>
-                {item.stack ? (
-                  <div className="pills">
-                    {item.stack.map((tech) => (
-                      <span key={tech} className="pill">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
-              </article>
-            ))}
-          </div>
-        </section>
-
-        {/* ---------------- contact ---------------- */}
-        <section id="contact" className="shell section">
+        {/* ---------------- contact ----------------
+            The second section on the larger padding, and the end of the page:
+            the footer lives inside the panel rather than as a band below it. */}
+        <section id="contact" className="shell section section-major">
           <p className="section-label">Contact</p>
           <div className="contact-panel">
             <h2>{contact.title}</h2>
@@ -234,17 +240,15 @@ export default function HomePage() {
                 Résumé (PDF)
               </a>
             </div>
+
+            <footer className="site-footer">
+              <span>
+                {profile.name} · {profile.location}
+              </span>
+              <span>{profile.availability}</span>
+            </footer>
           </div>
         </section>
-
-        <div className="shell">
-          <footer className="site-footer">
-            <span>
-              {profile.name} · {profile.location}
-            </span>
-            <span>{profile.availability}</span>
-          </footer>
-        </div>
       </main>
     </>
   );
