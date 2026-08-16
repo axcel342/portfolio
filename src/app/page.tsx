@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FactBar } from "@/components/fact-bar";
 import { Hero } from "@/components/hero";
 import { LogoTile } from "@/components/logo-tile";
+import { GitHubMark, GmailMark, LinkedInMark } from "@/components/logos";
 import { SiteNav } from "@/components/site-nav";
 import { capabilities } from "@/content/capabilities";
 import { alsoBuilt, certifications, contact, education } from "@/content/home";
@@ -27,10 +28,6 @@ export default function HomePage() {
               <p className="section-label">Selected work</p>
               <h2 className="section-title">Systems in production, not prototypes</h2>
             </div>
-            <p className="section-note">
-              Four projects written up the way an engineer reads them — the problem, the
-              architectural decision I&rsquo;d defend, and what happened once real people used it.
-            </p>
           </div>
 
           <div className="card-grid">
@@ -216,8 +213,12 @@ export default function HomePage() {
           <div className="contact-panel">
             <h2>{contact.title}</h2>
             <p>{contact.body}</p>
+            {/* Same marks as the hero action row, but labelled here: this is the
+                last thing on the page, so nothing should have to be recognised
+                from its icon alone. */}
             <div className="contact-actions">
               <a className="btn btn-primary btn-lg" href={`mailto:${profile.email}`}>
+                <GmailMark size={17} />
                 {profile.email}
               </a>
               <a
@@ -226,6 +227,7 @@ export default function HomePage() {
                 rel="noreferrer noopener"
                 target="_blank"
               >
+                <LinkedInMark size={17} />
                 LinkedIn
               </a>
               <a
@@ -234,6 +236,7 @@ export default function HomePage() {
                 rel="noreferrer noopener"
                 target="_blank"
               >
+                <GitHubMark size={17} />
                 GitHub
               </a>
               <a className="btn btn-ghost btn-lg" href={profile.links.resume}>

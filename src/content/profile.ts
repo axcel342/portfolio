@@ -21,6 +21,8 @@ export const profile = {
   firstName: "Momin",
   role: "AI Engineer",
   location: "Lahore, Pakistan",
+  /** For tight rows — the hero card's meta line wraps at the full spelling. */
+  locationShort: "Lahore, PK",
   availability: "Open to new roles & client work",
   email: "mominimran000@gmail.com",
   phone: "+92 321-8336629",
@@ -35,7 +37,10 @@ export const profile = {
   links: {
     github: "https://github.com/axcel342",
     linkedin: "https://www.linkedin.com/in/momin-imran-qureshi",
-    resume: "/resume.pdf",
+    /* Named rather than "resume.pdf" so the file a recruiter downloads is
+       identifiable in a folder of other people's CVs. Every résumé link on the
+       site reads this one value. */
+    resume: "/Momin_Imran_Qureshi_CV.pdf",
   },
   /**
    * Derived from the deployment unless NEXT_PUBLIC_SITE_URL overrides it, so a

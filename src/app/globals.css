@@ -271,6 +271,30 @@
     font-size: 0.98rem;
   }
 
+  /* Defined after btn-ghost and btn-lg so equal specificity resolves its way —
+     the icon buttons take a circle, not the pill padding. */
+  .btn-icon {
+    inline-size: 2.9rem;
+    block-size: 2.9rem;
+    padding: 0;
+    border-radius: 50%;
+    border-color: var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-muted);
+  }
+
+  .btn-icon:hover {
+    border-color: var(--color-violet);
+    background: var(--color-raised);
+    color: var(--color-text);
+    transform: translateY(-1px);
+  }
+
+  /* Inside a labelled button the mark sits beside the text rather than alone. */
+  .btn > svg {
+    flex: none;
+  }
+
   /* ---------- hero ---------- */
   .hero {
     display: grid;
@@ -337,19 +361,51 @@
     max-inline-size: 21rem;
   }
 
-  .hero-portrait-frame {
-    position: relative;
+  /* The gradient edge moves from the image to the card, so the photo and the
+     name it belongs to read as one object rather than two stacked ones. */
+  .hero-card {
     border-radius: 1.5rem;
     padding: 1px;
     background: linear-gradient(150deg, rgba(139, 124, 246, 0.75), rgba(61, 216, 240, 0.35) 55%, var(--color-border));
+  }
+
+  .hero-portrait-frame {
+    position: relative;
+    border-start-start-radius: calc(1.5rem - 1px);
+    border-start-end-radius: calc(1.5rem - 1px);
+    overflow: hidden;
+    background: var(--color-surface);
   }
 
   .hero-portrait-frame > img {
     display: block;
     inline-size: 100%;
     block-size: auto;
-    border-radius: calc(1.5rem - 1px);
     background: var(--color-surface);
+  }
+
+  .hero-card-body {
+    background: var(--color-surface);
+    border-end-start-radius: calc(1.5rem - 1px);
+    border-end-end-radius: calc(1.5rem - 1px);
+    padding: 0.85rem 1.05rem 0.95rem;
+  }
+
+  .hero-card-name {
+    font-family: var(--font-display);
+    font-size: 1.02rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .hero-card-meta {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+    color: var(--color-faint);
+    margin: 0.3rem 0 0;
   }
 
   .hero-badge svg {
@@ -1258,7 +1314,7 @@
 
   .hero-portrait {
     order: -1;
-    max-inline-size: 15rem;
+    max-inline-size: 17rem;
     justify-self: start;
   }
 

@@ -39,8 +39,15 @@ test.describe("home page", () => {
     await expect(page.locator("h1")).toContainText("survive real users");
     await expect(page.locator(".pill-status")).toBeVisible();
     await expect(page.locator(".hero-portrait img")).toBeVisible();
-    await expect(page.locator('.hero-actions a[href^="mailto:"]')).toBeVisible();
-    await expect(page.locator('.hero-actions a[href="/resume.pdf"]')).toBeVisible();
+    await expect(page.locator('.hero-actions a[href^="mailto:"]').first()).toBeVisible();
+    await expect(page.locator('.hero-actions a[href="/Momin_Imran_Qureshi_CV.pdf"]')).toBeVisible();
+
+    // The icon links carry their own accessible name — the mark inside each is
+    // decorative, so without a label they would announce as their href.
+    for (const label of ["GitHub", "LinkedIn", "Email"]) {
+      await expect(page.locator(`.hero-actions a[aria-label="${label}"]`)).toBeVisible();
+    }
+    await expect(page.locator(".hero-card-name")).toContainText("Momin Imran Qureshi");
   });
 
   test("carries every section the nav promises", async ({ page }) => {
