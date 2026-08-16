@@ -105,30 +105,9 @@
     padding-inline: 1.5rem;
   }
 
-  /* Uniform padding made every seam a 144px void and grouped nothing. The base
-     is tight; the two sections that deserve a breath — Work, where the proof
-     starts, and Contact, where it ends — opt into `section-major`. Defined
-     after `.section` so equal specificity resolves in its favour. */
   .section {
-    padding-block: 2.75rem;
+    padding-block: 4.5rem;
     scroll-margin-top: var(--nav-h);
-  }
-
-  .section-major {
-    padding-block: 4rem;
-  }
-
-  /* Title left, note right, on one baseline. Stacked, the note wrapped to three
-     short lines at 52ch with half the viewport empty beside it. */
-  .section-head {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0.75rem 3rem;
-    align-items: end;
-  }
-
-  .section-head:has(.section-note) {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   }
 
   .section-label {
@@ -161,10 +140,9 @@
   }
 
   .section-note {
-    margin: 0;
+    margin: 0.75rem 0 0;
     color: var(--color-muted);
     max-width: 52ch;
-    font-size: 0.95rem;
   }
 
   .gradient-text {
@@ -455,7 +433,7 @@
        24rem tracks overflow any viewport narrower than 384px. */
     grid-template-columns: repeat(auto-fit, minmax(min(24rem, 100%), 1fr));
     gap: 1.25rem;
-    margin-top: 1.75rem;
+    margin-top: 2.25rem;
   }
 
   /* Three cards, three columns — 24rem tracks would leave the third orphaned. */
@@ -528,7 +506,7 @@
 
   .credential-link {
     display: inline-block;
-    margin-top: 0.55rem;
+    margin-top: 0.9rem;
     font-family: var(--font-mono);
     font-size: 0.68rem;
     letter-spacing: 0.08em;
@@ -702,29 +680,19 @@
     margin-block-start: 0.55rem;
   }
 
-  /* ---------- stack groups ----------
-     One block of four labelled rows rather than four cards. As cards, three fit
-     per row and "Backend & infra" was orphaned onto a row of its own, while the
-     two shortest stretched to the tallest and left blank card floor. */
+  /* ---------- stack groups ---------- */
   .stack-grid {
-    margin-top: 1.75rem;
-    border: 1px solid var(--color-border);
-    border-radius: 1.1rem;
-    background: var(--color-surface);
-    overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
+    gap: 1.25rem;
+    margin-top: 2.25rem;
   }
 
   .stack-group {
-    display: grid;
-    grid-template-columns: 11rem minmax(0, 1fr);
-    gap: 0.6rem 1.5rem;
-    align-items: baseline;
-    padding: 1.1rem 1.5rem;
-    border-block-start: 1px solid var(--color-border-soft);
-  }
-
-  .stack-group:first-child {
-    border-block-start: 0;
+    padding: 1.5rem;
+    border-radius: 1.1rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
   }
 
   .stack-group h3 {
@@ -734,33 +702,22 @@
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--color-cyan);
-    margin: 0;
+    margin: 0 0 1rem;
   }
 
-  /* ---------- education ----------
-     Two of the three entries are one-liners, so they get no card body. The row
-     reads as a footnote to the work above it, which is what it is. */
+  /* ---------- education ---------- */
   .edu-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
-    gap: 1.5rem 2rem;
-    margin-top: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
+    gap: 1.25rem;
+    margin-top: 2.25rem;
   }
 
-  /* The logo sits beside the text rather than stacking above it, which is where
-     most of the old card height went. */
   .edu-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.9rem;
-  }
-
-  .edu-item > .logo-tile {
-    flex: none;
-  }
-
-  .edu-body {
-    min-inline-size: 0;
+    padding: 1.5rem;
+    border-radius: 1.1rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
   }
 
   /* One tile shape for every logo. Light, because these marks are drawn for
@@ -768,18 +725,19 @@
   .logo-tile {
     display: grid;
     place-items: center;
-    inline-size: 2.25rem;
-    block-size: 2.25rem;
-    border-radius: 0.6rem;
+    inline-size: 3rem;
+    block-size: 3rem;
+    border-radius: 0.75rem;
     background: #ffffff;
     border: 1px solid rgba(243, 244, 249, 0.16);
     overflow: hidden;
+    margin-bottom: 1.1rem;
   }
 
   /* Fills most of the tile — a small mark floating in white reads as a mistake. */
   .logo-tile img {
-    inline-size: 1.85rem;
-    block-size: 1.85rem;
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
     object-fit: contain;
   }
 
@@ -789,10 +747,10 @@
 
   .edu-item h3 {
     font-family: var(--font-display);
-    font-size: 1.02rem;
+    font-size: 1.05rem;
     font-weight: 600;
     letter-spacing: -0.015em;
-    margin: 0.15rem 0 0.3rem;
+    margin: 0.5rem 0 0.35rem;
   }
 
   .edu-item .where {
@@ -808,61 +766,10 @@
     font-size: 0.92rem;
   }
 
-  /* ---------- also built ----------
-     Two projects that don't warrant a section of their own. As a list under the
-     work grid they read as the second tier they are, at a fifth of the height. */
-  .also-built {
-    margin-top: 1.75rem;
-    padding-block-start: 1.25rem;
-    border-block-start: 1px solid var(--color-border-soft);
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
-  }
-
-  .also-built > .section-label {
-    margin-bottom: 0;
-  }
-
-  /* The year sits next to the title it dates, not at the far edge of the page. */
-  .also-item {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 0.3rem 0.8rem;
-    align-items: baseline;
-  }
-
-  .also-item h3 {
-    grid-column: 1;
-    font-family: var(--font-display);
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: -0.015em;
-    margin: 0;
-  }
-
-  .also-item > .when {
-    grid-column: 2;
-    justify-self: start;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    color: var(--color-faint);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .also-item p {
-    grid-column: 1 / -1;
-    margin: 0;
-    color: var(--color-muted);
-    font-size: 0.9rem;
-    max-width: 78ch;
-  }
-
   /* ---------- contact ---------- */
   .contact-panel {
-    margin-top: 1.5rem;
-    padding: 2.25rem;
+    margin-top: 2rem;
+    padding: 2.5rem;
     border-radius: 1.5rem;
     border: 1px solid var(--color-border);
     background:
@@ -892,13 +799,9 @@
     margin-top: 1.75rem;
   }
 
-  /* Inside the contact panel rather than below it. As a separate band it stated
-     availability a fourth time, after the hero pill, the fact bar and the
-     contact copy. */
   .site-footer {
     border-top: 1px solid var(--color-border-soft);
-    margin-top: 1.75rem;
-    padding-top: 1.25rem;
+    padding-block: 1.75rem 2.5rem;
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem 1.5rem;
@@ -1262,60 +1165,7 @@
     justify-self: start;
   }
 
-  .section-head:has(.section-note) {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  /* The section anchors used to be hidden outright with nothing in their place,
-     which left a phone with no way to reach anything but by scrolling the whole
-     page. They get their own row under the brand and scroll sideways there —
-     squeezed onto the brand row they shrink to nothing. */
-  .nav-inner {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-rows: var(--nav-h) auto;
-    block-size: auto;
-    column-gap: 1rem;
-    padding-block-end: 0.65rem;
-    align-items: center;
-  }
-
-  .nav-brand {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .nav-inner > .btn {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
   .nav-links {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    gap: 1.1rem;
-    font-size: 0.85rem;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-    min-inline-size: 0;
-  }
-
-  /* The header is two rows tall here, so an anchored section must clear both. */
-  .section {
-    scroll-margin-top: calc(var(--nav-h) + 2.4rem);
-  }
-
-  .nav-links::-webkit-scrollbar {
-    display: none;
-  }
-
-  .nav-links a {
-    white-space: nowrap;
-  }
-
-  /* Both live in the contact panel, so they don't need the cramped row too. */
-  .nav-links .nav-external {
     display: none;
   }
 }
@@ -1328,17 +1178,7 @@
 
 @media (max-width: 40rem) {
   .section {
-    padding-block: 2.25rem;
-  }
-
-  .section-major {
-    padding-block: 3rem;
-  }
-
-  .stack-group {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0.7rem;
-    padding-inline: 1.25rem;
+    padding-block: 3.25rem;
   }
 
   .contact-panel {

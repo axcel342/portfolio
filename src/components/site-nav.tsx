@@ -21,19 +21,10 @@ export function SiteNav({ sections = true }: { readonly sections?: boolean }) {
                 </a>
               ))
             : null}
-          {/* Dropped on narrow viewports, where the section anchors need the
-              room and the contact panel carries both links anyway. */}
-          <a
-            className="nav-external"
-            href={profile.links.github}
-            rel="noreferrer noopener"
-            target="_blank"
-          >
+          <a href={profile.links.github} rel="noreferrer noopener" target="_blank">
             GitHub
           </a>
-          <a className="nav-external" href={profile.links.resume}>
-            Résumé
-          </a>
+          <a href={profile.links.resume}>Résumé</a>
         </nav>
 
         <a className="btn btn-primary" href={`mailto:${profile.email}`}>
