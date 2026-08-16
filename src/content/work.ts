@@ -15,6 +15,14 @@ export const workIndex: readonly WorkIndexEntry[] = [
     domain: "Enterprise · Governed agents",
     summary:
       "Persistent, governed agents over meetings, tasks, relationships and projects. I work on the evaluation and regression tooling that grades what agents actually did, and drive vulnerability remediation for SOC 2 and HIPAA readiness.",
+    // Ember was the one card without figures, so `margin-top: auto` on the
+    // read-more link left a hole in the middle of it. All three are drawn from
+    // the case study's own cited sources.
+    stats: [
+      { value: "4", label: "agent surfaces" },
+      { value: "2", label: "compliance tracks" },
+      { value: "5", label: "backing services" },
+    ],
     stack: ["FastAPI", "Next.js", "PostgreSQL", "OpenSearch", "Celery", "Docker"],
   },
   {
