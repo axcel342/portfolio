@@ -5,14 +5,18 @@ export const experience: readonly Role[] = [
   {
     company: "BrainBoxAutomations",
     role: "AI Engineer",
-    when: "Sep 2025 — Present",
+    when: "Jan 2025 — Present",
     where: "Remote",
     summary:
       "Three AI products end to end: sales automation over live inboxes, a production RAG microservice, and a multi-modal coaching system.",
+    /**
+     * Kimport, Halil and Anti-Fragility are written up as case studies above, so
+     * describing them again here made a reader feel they had already read the
+     * page. What is left is the part the cards do not cover: how the work ran.
+     */
     bullets: [
-      "Built Kimport AI Sales Assistant — an AI sales automation system monitoring 4 Gmail inboxes, generating contextual reply drafts with hybrid retrieval (BM25 + dense vectors via Qdrant) and LLMs, with stalled-client detection and executive analytics.",
-      "Developed the Halil RAG Chatbot Microservice — a production-grade RAG API on FastAPI with LangGraph query routing, LaBSE multi-language embeddings, and layout-aware ingestion of PDF, TXT and PPTX via Docling.",
-      "Built Anti-Fragility Coach — a multi-modal RAG system on Gemini 2.5 Flash, Claude Sonnet 4.5 and Qdrant on Amazon EC2, embedding 600+ documents with gemini-embedding-001; iterated prompt and retrieval quality on feedback from 75+ beta users.",
+      "Kimport, Halil and Anti-Fragility are all written up above — the case studies carry the architecture and the numbers.",
+      "Owned each one from first commit to production: retrieval design, prompt and eval iteration, deployment, and the tuning that followed real usage.",
     ],
     stack: [
       "Python",
